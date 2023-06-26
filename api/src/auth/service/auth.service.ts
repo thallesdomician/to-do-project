@@ -47,6 +47,11 @@ export class AuthService {
       refresh_token,
     };
 
+    await this.loginModel
+      .deleteMany({
+        'user.username': username,
+      })
+      .exec();
     await this.loginModel.create(data);
 
     return data;

@@ -46,8 +46,10 @@ export class CommonModule {
           useFactory: (configService: ConfigService) => {
             return {
               global: true,
-              secret: '36505a94-6245-4472-bc7c-9b3ddea8e5f1',
-              signOptions: { expiresIn: '60s' },
+              secret: configService.get<string>('auth.secret'),
+              signOptions: {
+                expiresIn: configService.get<string>('auth.expiration'),
+              },
             };
           },
           inject: [ConfigService],
