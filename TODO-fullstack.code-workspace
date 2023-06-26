@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "mobile"
+		},
+		{
+			"path": "api"
+		},
+		{
+			"name": "to-do-fullstack",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,35 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=${ME_CONFIG_MONGODB_SERVER}
+      - ME_CONFIG_MONGODB_PORT=${ME_CONFIG_MONGODB_PORT}
+
+  nest-app:
+    container_name: todo-list-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${API_PORT}:${API_PORT}
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=${MONGO_URI}/${MONGO_DATABASE_NAME}
+    volumes:
+      - .:/app
+
+    
+
+volumes:
+  mongodb-data:
