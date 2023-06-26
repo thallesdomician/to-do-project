@@ -3,6 +3,7 @@ import { CommonModule } from '@app/common/common.module';
 import { UserModule } from '@app/user/user.module';
 import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AppService } from '@app/app.service';
       },
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

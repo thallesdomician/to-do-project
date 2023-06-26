@@ -22,7 +22,7 @@ export class UserService {
     const password = await bcrypt
       .hash(input.password, 10)
       .then((hash) => {
-        console.log(hash);
+        console.log(input, hash);
         return hash;
       })
       .catch((err) => {
@@ -38,7 +38,7 @@ export class UserService {
     return createdCat;
   }
 
-  async findOne(id: string) {
-    return await this.userModel.findOne({ id }).exec();
+  async findOne(username: string) {
+    return await this.userModel.findOne({ username }).exec();
   }
 }
