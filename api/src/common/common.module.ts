@@ -1,9 +1,11 @@
+import { AuthGuard } from '@app/auth/guard/auth.guard';
 import { databaseConfig } from '@app/common/config';
 import { authConfig } from '@app/common/config/jwt.config';
 import { CommonModuleOptions } from '@app/common/interfaces';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
@@ -56,6 +58,12 @@ export class CommonModule {
         }),
       ],
       exports: [JwtModule],
+      providers: [
+        {
+          provide: APP_GUARD,
+          useClass: AuthGuard,
+        },
+      ],
     };
   }
 }
