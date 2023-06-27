@@ -34,8 +34,8 @@ export class UserService {
       username: input.username,
     };
 
-    const createdCat = await this.userModel.create(data);
-    return createdCat;
+    const createdUser = await this.userModel.create(data);
+    return createdUser;
   }
 
   async findOne(username: string, user?: string) {

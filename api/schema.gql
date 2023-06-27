@@ -13,15 +13,38 @@ type Login {
   refresh_token: String!
 }
 
+type Item {
+  """Title"""
+  title: String!
+
+  """Description"""
+  description: String
+
+  """Datetime"""
+  datetime: DateTime
+
+  """Position"""
+  position: Int
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
   user(username: String!): User
   currentUser: User
+  item(id: Int!): Item!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   login(login: LoginAuthInput!): Login
   refreshToken(login: RefreshTokenAuthInput!): Login!
+  createItem(createItemInput: CreateItemInput!): Item!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
+  removeItem(id: Int!): Item!
 }
 
 input CreateUserInput {
@@ -49,4 +72,27 @@ input RefreshTokenAuthInput {
 
   """Password"""
   password: Int!
+}
+
+input CreateItemInput {
+  """Title"""
+  title: String!
+
+  """Description"""
+  description: String!
+
+  """Description"""
+  datetime: DateTime
+}
+
+input UpdateItemInput {
+  """Title"""
+  title: String
+
+  """Description"""
+  description: String
+
+  """Description"""
+  datetime: DateTime
+  id: Int!
 }
