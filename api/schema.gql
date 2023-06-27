@@ -15,6 +15,7 @@ type Login {
 
 type Query {
   user(username: String!): User
+  currentUser: User
 }
 
 type Mutation {

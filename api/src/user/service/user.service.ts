@@ -38,7 +38,7 @@ export class UserService {
     return createdCat;
   }
 
-  async findOne(username: string) {
+  async findOne(username: string, user?: string) {
     return await this.userModel.findOne({ username }).exec();
   }
 }

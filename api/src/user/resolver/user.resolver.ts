@@ -1,4 +1,5 @@
 import { Public } from '@app/auth/decorator/public.decorator';
+import { CurrentUser } from '@app/auth/decorator/user.decorator';
 import { CreateUserInput, UpdateUserInput } from '@app/user/dto';
 import { User } from '@app/user/schema';
 import { UserService } from '@app/user/service';
@@ -17,5 +18,10 @@ export class UserResolver {
   @Query(() => User, { name: 'user', nullable: true })
   findOne(@Args('username', { type: () => String }) username: string) {
     return this.userService.findOne(username);
+  }
+
+  @Query(() => User, { name: 'currentUser', nullable: true })
+  currentUser(@CurrentUser() user: User) {
+    return this.userService.findOne(user.username);
   }
 }
