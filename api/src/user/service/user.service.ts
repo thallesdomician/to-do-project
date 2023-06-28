@@ -22,7 +22,6 @@ export class UserService {
     const password = await bcrypt
       .hash(input.password, 10)
       .then((hash) => {
-        console.log(input, hash);
         return hash;
       })
       .catch((err) => {

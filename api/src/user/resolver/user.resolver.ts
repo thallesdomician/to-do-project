@@ -1,9 +1,9 @@
 import { Public } from '@app/auth/decorator/public.decorator';
 import { CurrentUser } from '@app/auth/decorator/user.decorator';
-import { CreateUserInput, UpdateUserInput } from '@app/user/dto';
+import { CreateUserInput } from '@app/user/dto';
 import { User } from '@app/user/schema';
 import { UserService } from '@app/user/service';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 @Resolver(() => User)
 export class UserResolver {

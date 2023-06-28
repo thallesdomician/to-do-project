@@ -1,8 +1,17 @@
-import { CreateItemInput, UpdateItemInput } from '@app/item/dto';
+import { IUserPayload } from '@app/auth/interface';
+import {
+  CreateItemInput,
+  FindByDateInput,
+  UpdateItemInput,
+} from '@app/item/dto';
 import { Item } from '@app/item/entities';
-import { User } from '@app/user/schema';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { endOfDay, startOfDay } from 'date-fns';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -12,21 +21,42 @@ export class ItemService {
   ) {}
 
   async create(dataInput: CreateItemInput) {
-    dataInput.datetime;
     const createdItem = await this.itemModel.create(dataInput);
     return createdItem;
   }
 
-  findAll(user: User) {
-    return `This action returns all item from: ${user.username}`;
+  async findAll(input: FindByDateInput, userPayload: IUserPayload) {
+    return await this.itemModel
+      .find({
+        startAt: {
+          $gte: startOfDay(input.startAt),
+          $lt: endOfDay(input.finishAt || input.startAt),
+        },
+        user: userPayload.sub,
+      })
+      .sort({ datetime: 1, position: 1 })
+      .exec();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} item`;
   }
 
-  update(id: number, updateItemInput: UpdateItemInput) {
-    return `This action updates a #${id} item`;
+  async update(
+    id: string,
+    updateItemInput: UpdateItemInput,
+    userPayload: IUserPayload,
+  ) {
+    const updated = await this.itemModel.updateOne(
+      { _id: id, user: userPayload.sub },
+      { finished: updateItemInput.finished },
+    );
+    if (updated.modifiedCount == 0) throw new NotFoundException();
+
+    const newItem = await this.itemModel
+      .findOne({ _id: id, user: userPayload.sub })
+      .exec();
+    return newItem;
   }
 
   remove(id: number) {

@@ -14,17 +14,23 @@ type Login {
 }
 
 type Item {
+  """ID"""
+  id: String!
+
   """Title"""
   title: String!
 
   """Description"""
   description: String
 
-  """Datetime"""
-  datetime: DateTime
+  """startAt"""
+  startAt: DateTime
 
-  """Position"""
-  position: Int
+  """finishAt"""
+  finishAt: DateTime
+
+  """finished"""
+  finished: Boolean
 }
 
 """
@@ -35,7 +41,16 @@ scalar DateTime
 type Query {
   user(username: String!): User
   currentUser: User
+  findByDate(date: FindByDateInput!): [Item!]!
   item(id: Int!): Item!
+}
+
+input FindByDateInput {
+  """StartDate"""
+  startAt: DateTime!
+
+  """StartDate"""
+  finishAt: DateTime
 }
 
 type Mutation {
@@ -81,8 +96,8 @@ input CreateItemInput {
   """Description"""
   description: String!
 
-  """Description"""
-  datetime: DateTime
+  """StartAt"""
+  startAt: DateTime
 }
 
 input UpdateItemInput {
@@ -92,7 +107,10 @@ input UpdateItemInput {
   """Description"""
   description: String
 
-  """Description"""
-  datetime: DateTime
-  id: Int!
+  """StartAt"""
+  startAt: DateTime
+  id: String!
+
+  """Finished"""
+  finished: Boolean
 }
