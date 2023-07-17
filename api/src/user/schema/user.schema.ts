@@ -7,17 +7,15 @@ export type UserDocument = HydratedDocument<User>;
 @Schema()
 @ObjectType()
 export class User {
-  id?: string;
-
-  @Prop()
   @Field({ nullable: false })
-  name: string;
+  id?: string;
 
   @Prop({ unique: true })
   @Field({ nullable: false })
   username: string;
 
   @Prop()
+  @Field({ nullable: false })
   password: string;
 }
 

@@ -1,17 +1,8 @@
 import { IUserPayload } from '@app/auth/interface';
-import {
-  CreateItemInput,
-  FindByDateInput,
-  UpdateItemInput,
-} from '@app/item/dto';
+import { CreateItemInput, UpdateItemInput } from '@app/item/dto';
 import { Item } from '@app/item/entities';
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { endOfDay, startOfDay } from 'date-fns';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -20,46 +11,34 @@ export class ItemService {
     @InjectModel(Item.name) private readonly itemModel: Model<Item>,
   ) {}
 
-  async create(dataInput: CreateItemInput) {
-    const createdItem = await this.itemModel.create(dataInput);
-    return createdItem;
+  async create(dataInput: CreateItemInput, user: IUserPayload) {
+    dataInput.user = user.sub;
+    return await this.itemModel.create(dataInput);
   }
 
-  async findAll(input: FindByDateInput, userPayload: IUserPayload) {
-    return await this.itemModel
-      .find({
-        startAt: {
-          $gte: startOfDay(input.startAt),
-          $lt: endOfDay(input.finishAt || input.startAt),
-        },
-        user: userPayload.sub,
-      })
-      .sort({ datetime: 1, position: 1 })
-      .exec();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} item`;
+  async findOne(id: number, user: IUserPayload) {
+    const res = await this.itemModel.findOne({ id, user: user.sub }).exec();
+    return res;
   }
 
   async update(
     id: string,
     updateItemInput: UpdateItemInput,
-    userPayload: IUserPayload,
+    user: IUserPayload,
   ) {
     const updated = await this.itemModel.updateOne(
-      { _id: id, user: userPayload.sub },
-      { finished: updateItemInput.finished },
+      { _id: id, user: user.sub },
+      { ...updateItemInput },
     );
     if (updated.modifiedCount == 0) throw new NotFoundException();
 
     const newItem = await this.itemModel
-      .findOne({ _id: id, user: userPayload.sub })
+      .findOne({ _id: id, user: updateItemInput.user })
       .exec();
     return newItem;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} item`;
+  remove(id: number, user: IUserPayload) {
+    return `This action removes a #${id}  ${user.username}item`;
   }
 }

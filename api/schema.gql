@@ -3,8 +3,9 @@
 # ------------------------------------------------------
 
 type User {
-  name: String!
+  id: String!
   username: String!
+  password: String!
 }
 
 type Login {
@@ -17,57 +18,58 @@ type Item {
   """ID"""
   id: String!
 
-  """Title"""
-  title: String!
+  """Key"""
+  key: String!
+
+  """Value"""
+  value: String!
+
+  """active"""
+  active: Boolean
+}
+
+type Profile {
+  """ID"""
+  id: String!
+
+  """Image"""
+  image: String
+
+  """Cor"""
+  cor: String
+
+  """slug"""
+  slug: String!
+
+  """Name"""
+  name: String!
 
   """Description"""
   description: String
-
-  """startAt"""
-  startAt: DateTime
-
-  """finishAt"""
-  finishAt: DateTime
-
-  """finished"""
-  finished: Boolean
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Query {
   user(username: String!): User
   currentUser: User
-  findByDate(date: FindByDateInput!): [Item!]!
   item(id: Int!): Item!
-}
-
-input FindByDateInput {
-  """StartDate"""
-  startAt: DateTime!
-
-  """StartDate"""
-  finishAt: DateTime
+  profile: Profile
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
+  register(register: CreateUserInput!): Login!
   login(login: LoginAuthInput!): Login
   refreshToken(login: RefreshTokenAuthInput!): Login!
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: Int!): Item!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: Int!): Profile!
 }
 
 input CreateUserInput {
   """Username"""
   username: String!
-
-  """Name"""
-  name: String!
 
   """Password"""
   password: String!
@@ -90,27 +92,50 @@ input RefreshTokenAuthInput {
 }
 
 input CreateItemInput {
-  """Title"""
-  title: String!
+  """Key"""
+  key: String!
 
-  """Description"""
-  description: String!
-
-  """StartAt"""
-  startAt: DateTime
+  """Value"""
+  value: String!
 }
 
 input UpdateItemInput {
-  """Title"""
-  title: String
+  """Key"""
+  key: String
+
+  """Value"""
+  value: String
+  id: String!
+
+  """active"""
+  active: Boolean
+}
+
+input CreateProfileInput {
+  """Color"""
+  cor: String!
+
+  """Slug"""
+  slug: String!
+
+  """Name"""
+  name: String!
+
+  """Description"""
+  description: String!
+}
+
+input UpdateProfileInput {
+  """Color"""
+  cor: String
+
+  """Slug"""
+  slug: String
+
+  """Name"""
+  name: String
 
   """Description"""
   description: String
-
-  """StartAt"""
-  startAt: DateTime
-  id: String!
-
-  """Finished"""
-  finished: Boolean
+  id: Int!
 }

@@ -4,11 +4,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from '@app/auth/service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly authService: AuthService,
   ) {}
 
   async create(input: CreateUserInput) {
@@ -28,16 +30,17 @@ export class UserService {
         throw new Error(err);
       });
     const data: User = {
-      name: input.name,
       password,
       username: input.username,
     };
 
-    const createdUser = await this.userModel.create(data);
-    return createdUser;
+    const user = await this.userModel.create(data);
+    user.password = '';
+    const auth = await this.authService.generatePayload(user);
+    return { ...auth };
   }
 
-  async findOne(username: string, user?: string) {
+  async findOne(username: string) {
     return await this.userModel.findOne({ username }).exec();
   }
 }

@@ -6,6 +6,6 @@ export class UpdateItemInput extends PartialType(CreateItemInput) {
   @Field(() => String)
   id: string;
 
-  @Field(() => Boolean, { description: 'Finished', nullable: true })
-  finished?: boolean;
+  @Field(() => Boolean, { description: 'active', nullable: true })
+  active?: boolean;
 }

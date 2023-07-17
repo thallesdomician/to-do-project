@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - ${API_PORT}:${API_PORT}
+      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - mongodb
     environment:

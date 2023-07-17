@@ -1,5 +1,6 @@
 import { AuthGuard } from '@app/auth/guard/auth.guard';
 import { databaseConfig } from '@app/common/config';
+import { appConfig } from '@app/common/config/app.config';
 import { authConfig } from '@app/common/config/jwt.config';
 import { CommonModuleOptions } from '@app/common/interfaces';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -19,6 +20,7 @@ export class CommonModule {
       module: CommonModule,
       imports: [
         ConfigModule.forRoot({ ...options.configModule }),
+        ConfigModule.forFeature(appConfig()),
         ConfigModule.forFeature(databaseConfig()),
         ConfigModule.forFeature(authConfig()),
         GraphQLModule.forRoot<ApolloDriverConfig>({

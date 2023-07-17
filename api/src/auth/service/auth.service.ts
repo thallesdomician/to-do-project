@@ -16,6 +16,23 @@ export class AuthService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
   ) {}
+
+  async generatePayload(user: User) {
+    const payload = { sub: user.id, username: user.username };
+    const access_token = await this.jwtService.signAsync(payload);
+    const refresh_token = uuidv4();
+
+    const data: Login = {
+      user,
+      expiration: add(new Date(), {
+        days: 1,
+      }),
+      access_token,
+      refresh_token,
+    };
+
+    return data;
+  }
   async login(loginInput: LoginAuthInput): Promise<Login> {
     const { username, password } = loginInput;
     const user = await this.userModel.findOne({ username }).exec();
@@ -30,18 +47,7 @@ export class AuthService {
 
     if (!isValid) throw new UnauthorizedException('Invalid user or password');
 
-    const payload = { sub: user.id, username: user.username };
-    const access_token = await this.jwtService.signAsync(payload);
-    const refresh_token = uuidv4();
-
-    const data: Login = {
-      user,
-      expiration: add(new Date(), {
-        days: 1,
-      }),
-      access_token,
-      refresh_token,
-    };
+    const data = await this.generatePayload(user);
 
     await this.loginModel
       .deleteMany({

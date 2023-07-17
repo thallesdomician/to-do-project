@@ -1,17 +1,18 @@
 import { Public } from '@app/auth/decorator/public.decorator';
 import { CurrentUser } from '@app/auth/decorator/user.decorator';
+import { Login } from '@app/auth/schema';
 import { CreateUserInput } from '@app/user/dto';
 import { User } from '@app/user/schema';
 import { UserService } from '@app/user/service';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
-@Resolver(() => User)
+@Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Public()
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  @Mutation(() => Login)
+  register(@Args('register') createUserInput: CreateUserInput) {
     return this.userService.create(createUserInput);
   }
 
