@@ -1,14 +1,15 @@
 {
 	"folders": [
 		{
-			"path": "mobile"
+			"path": "mobile",
+			"name": "mobile"
 		},
 		{
-			"path": "api"
-		},
-		{
-			"name": "to-do-fullstack",
-			"path": "."
+			"path": "api",
+			"name": "api"
+		}	,	{
+			"path": "web",
+			"name": "web"
 		}
 	],
 	"settings": {}
