@@ -36,13 +36,14 @@ export class AuthService {
   async login(loginInput: LoginAuthInput): Promise<Login> {
     const { username, password } = loginInput;
     const user = await this.userModel.findOne({ username }).exec();
+    if (!user) throw new Error('Usuário ou senha inválidos');
     const isValid = await bcrypt
       .compare(password, user.password)
       .then((res) => {
         return res;
       })
       .catch((err) => {
-        throw new Error(err);
+        throw new UnauthorizedException(err);
       });
 
     if (!isValid) throw new UnauthorizedException('Invalid user or password');
