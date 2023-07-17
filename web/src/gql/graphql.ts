@@ -127,34 +127,29 @@ export type MutationUpdateProfileArgs = {
 export type Profile = {
   __typename?: 'Profile';
   /** Cor */
-  cor: Scalars['String']['output'];
+  cor?: Maybe<Scalars['String']['output']>;
   /** Description */
   description?: Maybe<Scalars['String']['output']>;
   /** ID */
   id: Scalars['String']['output'];
   /** Image */
-  image: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
   /** Name */
   name: Scalars['String']['output'];
   /** slug */
-  slug?: Maybe<Scalars['String']['output']>;
+  slug: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
   item: Item;
-  profile: Profile;
+  profile?: Maybe<Profile>;
   user?: Maybe<User>;
 };
 
 
 export type QueryItemArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type QueryProfileArgs = {
   id: Scalars['Int']['input'];
 };
 

@@ -48,7 +48,7 @@ export default function Register() {
   const { createAuth, auth } = useAuth();
 
   useEffect(() => {
-    if (auth) router.push("/profile");
+    if (auth) router.push("/admin");
   });
 
   const onSubmit = async (input: InputsData) => {

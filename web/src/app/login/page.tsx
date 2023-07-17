@@ -15,17 +15,8 @@ type InputLoginData = {
 };
 
 const LoginSchema = z.object({
-  username: z
-    .string()
-    .min(1, { message: "campo username é obrigatório" })
-    .min(6, { message: "mínimo 6 caracteres" }),
-  password: z
-    .string()
-    .min(1, { message: "campo senha é obrigatório" })
-    .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
-      message:
-        "precisa ter no mínimo 8 caracteres, letras, números e caracteres especiais",
-    }),
+  username: z.string().min(1, { message: "campo username é obrigatório" }),
+  password: z.string().min(1, { message: "campo senha é obrigatório" }),
 });
 
 export default function Login() {
@@ -38,20 +29,23 @@ export default function Login() {
   } = useForm<InputLoginData>({ resolver: zodResolver(LoginSchema) });
   const router = useRouter();
 
-  const { createAuth, auth } = useAuth();
+  const { createAuth, auth, removeAuth } = useAuth();
 
   useEffect(() => {
-    if (auth) router.push("/profile");
+    if (auth) {
+      router.push("/admin");
+    }
   });
 
   const onSubmit = async (input: InputLoginData) => {
+    console.log("vars", input);
     client
       .mutate({
         mutation: MUTATION_LOGIN,
         variables: {
-          register: {
-            password: input.password,
+          login: {
             username: input.username,
+            password: input.password,
           },
         },
       })
@@ -126,7 +120,7 @@ export default function Login() {
                 <div className="mt-2">
                   <input
                     id="password"
-                    {...register("username")}
+                    {...register("password")}
                     type="password"
                     autoComplete="current-password"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
@@ -138,6 +132,14 @@ export default function Login() {
                   )}
                 </div>
               </div>
+
+              {errors.root && (
+                <div>
+                  <div className="text-red-500 font-light text-sm mt-3">
+                    {errors.root?.message}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <button
