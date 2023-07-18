@@ -22,7 +22,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       className={twMerge(inter.className, "bg-gray-100 p-3")}
     >
       <Navigation />
-      {children}
+      <main className="flex min-h-screen flex-col items-center justify-between py-2 ">
+        <div className=" w-min-96 w-full">{children}</div>
+      </main>
     </body>
   );
 }

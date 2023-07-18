@@ -33,7 +33,7 @@ export default function Login() {
 
   useEffect(() => {
     if (auth) {
-      router.push("/admin");
+      router.push("/admin/profile");
     }
   });
 

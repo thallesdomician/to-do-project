@@ -5,7 +5,7 @@ interface ILinkButtonIconProps {
 function LinkButtonIcon({ icon: Icon }: ILinkButtonIconProps) {
   return (
     <span className="p-1 md:pr-2 md:pl-0">
-      <Icon className="h-3 w-3" />
+      <Icon className="h-6 w-6" />
     </span>
   );
 }

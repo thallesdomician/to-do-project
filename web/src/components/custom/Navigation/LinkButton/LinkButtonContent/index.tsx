@@ -4,7 +4,7 @@ interface ILinkButtonContentProps {
 }
 function LinkButtonContent({text}: ILinkButtonContentProps) {
   return (
-    <span className='font-medium'>{text}</span>
+    <span className='font-normal text-base'>{text}</span>
   )
 }
 
